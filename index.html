@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ویرایشگر تصویر دکتر خسته</title>
+<title>DrNote | استودیوی تصویر پزشکی</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0f172a;--card:#1e293b;--soft:#172033;--line:#334155;--ac:#14b8a6;--ac2:#0f766e;--tx:#e2e8f0;--mu:#94a3b8;--hl:#e3b86b;--ck1:#2a3548;--ck2:#222c3d}
@@ -70,11 +70,154 @@ h3{font-size:13px;color:var(--hl);margin:16px 0 4px;font-weight:600}
 html[data-theme=light]{--bg:#e2e8f0;--card:#fff;--soft:#f1f5f9;--line:#cbd5e1;--tx:#0f172a;--mu:#64748b;--ck1:#dbe2ec;--ck2:#eef2f7}
 html[data-theme=sepia]{--bg:#efe8d8;--card:#fbf8f0;--soft:#f4eedf;--line:#d8ccb4;--tx:#3b3226;--mu:#8a7b63;--ck1:#e6dcc4;--ck2:#f1e9d6}
 @media(max-width:860px){body{height:auto;min-height:100vh}main{grid-template-columns:1fr;grid-template-rows:auto 60vh auto}#tools{flex-direction:row;border:none;border-bottom:1px solid var(--line)}#tools button{min-width:58px}aside{border:none}}
+
+/* DrNote visual refresh */
+:root{--bg:#0b1220;--card:#121e30;--soft:#17263a;--line:#273b52;--ac:#42d6c0;--ac2:#087f79;--tx:#edf5fb;--mu:#9aadc1;--hl:#f3c879;--ck1:#26374b;--ck2:#1d2c40}
+body{background:radial-gradient(ellipse at 50% -20%,#1c3650 0%,var(--bg) 56%);letter-spacing:.05px}
+header{padding:11px 18px;gap:9px;background:rgba(18,30,48,.96);box-shadow:0 8px 28px #02081755;position:relative;z-index:3}
+h1{display:flex;align-items:center;gap:9px;font-size:17px;color:#eafcf9;white-space:nowrap}
+h1:before{content:'✚';display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:linear-gradient(145deg,#43d7c0,#0a847d);color:#062c31;font-size:19px;box-shadow:0 5px 16px #14b8a644}
+h1 small{font-size:12px;color:#9bb3c8;font-weight:600;border-right:1px solid var(--line);padding-right:10px;margin-right:1px}
+.btn{background:linear-gradient(180deg,#1b2c42,#152438);border:1px solid #30465f;border-radius:10px;padding:6px 12px;transition:transform .15s,border-color .15s,background .15s;box-shadow:0 2px 7px #0002}
+.btn:hover{border-color:var(--ac);transform:translateY(-1px)}
+.btn.pri{background:linear-gradient(135deg,#0d9488,#08756f);border-color:#20b9a7;box-shadow:0 5px 16px #0d948833}
+main{grid-template-columns:82px minmax(0,1fr) 360px;gap:0}
+#tools{padding:10px 7px;gap:6px;background:rgba(18,30,48,.95);border-left:1px solid var(--line)}
+#tools button{min-height:62px;border-radius:11px;padding:6px 2px;font-size:11px;transition:.15s}
+#tools button b{font-size:21px;margin-bottom:2px}
+#tools button:hover{background:#20364c;color:var(--tx);transform:translateY(-1px)}
+#tools button.on{background:linear-gradient(145deg,#0c8279,#075b60);border-color:#42d6c0;box-shadow:0 4px 15px #0d948833}
+#mid{background:#0a1422}
+#ctx{padding:9px 14px;gap:12px;background:#111f31;border-bottom:1px solid var(--line);box-shadow:0 3px 12px #0002}
+#ctx input[type=text],label.f input[type=text],label.f select,label.f input[type=number]{background:#0b1727;border:1px solid #31465e;border-radius:8px;padding:6px 9px}
+#ctx input[type=text]{width:190px}
+#stage{background:radial-gradient(ellipse at center,#17283d 0%,#0a1422 72%)}
+#wrap{border:1px solid #39516a;border-radius:4px;overflow:hidden;box-shadow:0 18px 60px #0009}
+#empty div{background:#14243a;border:1px dashed #4a6981;border-radius:18px;padding:38px 44px;box-shadow:0 12px 36px #0004}
+#empty b{color:#f1fbff}
+#st{background:#101d2d;border-top:1px solid #293d53;padding:6px 14px}
+aside{background:rgba(18,30,48,.98);border-right:1px solid var(--line);box-shadow:-8px 0 28px #0002}
+.tabs{padding:10px;gap:6px;background:rgba(18,30,48,.98);border-bottom:1px solid var(--line)}
+.tabs button{padding:7px 5px;border-radius:9px;background:#17263a;border-color:#2a4058}
+.tabs button.on{background:linear-gradient(135deg,#0d827a,#075d60);border-color:#37cdb9}
+.pn{padding:8px 16px 20px}
+label.r{margin:13px 0;gap:3px 8px}
+label.f{margin:12px 0}
+label.f input[type=text],label.f select,label.f input[type=number]{width:62%;color:var(--tx)}
+.g2{gap:8px}
+.pf button,.th button{background:#17283d;border-color:#2b4158;border-radius:12px;padding:8px 5px}
+.pf button:hover,.th button:hover{border-color:var(--ac);background:#20364c}
+.sw{width:22px;height:22px;border-color:#668098}
+h3{font-size:13px;color:#7fe4d5;margin:20px 0 7px;padding-bottom:5px;border-bottom:1px solid #293e54}
+#toast{background:#087f79;box-shadow:0 8px 28px #0006;border:1px solid #47cdb9}
+input,select{accent-color:var(--ac)}
+@media(max-width:1100px){main{grid-template-columns:70px minmax(0,1fr) 315px}header{padding:8px 10px}h1{font-size:14px}h1 small{display:none}}
+@media(max-width:860px){body{height:auto;min-height:100vh}header{position:sticky;top:0}main{grid-template-columns:1fr;grid-template-rows:auto minmax(58vh,65vh) auto}#tools{flex-direction:row;overflow-x:auto;border:none;border-bottom:1px solid var(--line);padding:7px}#tools button{min-width:66px;min-height:56px}aside{border:none;border-top:1px solid var(--line)}#ctx{position:sticky;top:0;z-index:2}#stage{min-height:58vh}}
+
+/* DrNote refreshed light interface: high contrast, calm clinical palette */
+:root{
+  color-scheme:light;
+  --bg:#f3f7f8;
+  --card:#ffffff;
+  --soft:#f7fafb;
+  --line:#dce7e9;
+  --ac:#0f9b91;
+  --ac2:#087f78;
+  --tx:#20323b;
+  --mu:#667b84;
+  --hl:#d28a29;
+  --ck1:#e7eef0;
+  --ck2:#f3f7f8;
+}
+/* Override the legacy light palette too, so old saved theme styles cannot darken or blacken text. */
+html[data-theme=light]{
+  color-scheme:light;
+  --bg:#f3f7f8;
+  --card:#ffffff;
+  --soft:#f7fafb;
+  --line:#dce7e9;
+  --ac:#0f9b91;
+  --ac2:#087f78;
+  --tx:#20323b;
+  --mu:#667b84;
+  --hl:#d28a29;
+  --ck1:#e7eef0;
+  --ck2:#f3f7f8;
+}
+body{background:radial-gradient(ellipse at 50% -24%,#e3f5f2 0%,var(--bg) 62%);color:var(--tx)}
+header{background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);box-shadow:0 5px 22px rgba(35,65,75,.07)}
+h1{color:#126f6c}
+h1:before{background:linear-gradient(145deg,#b7eee5,#64cbbc);color:#075b57;box-shadow:0 5px 14px rgba(15,155,145,.18)}
+h1 small{color:#71858d;border-color:var(--line)}
+.btn{background:#fff;color:var(--tx);border:1px solid #d5e2e5;box-shadow:0 2px 6px rgba(36,67,76,.05)}
+.btn:hover{background:#f3fbfa;border-color:var(--ac);color:#086f69}
+.btn.pri{background:linear-gradient(135deg,#109b91,#087b75);border-color:#0c9289;color:#fff;box-shadow:0 5px 14px rgba(8,127,120,.18)}
+.btn:disabled{color:#91a0a5;background:#f3f6f7;box-shadow:none}
+main{background:var(--bg)}
+#tools{background:#fbfdfd;border-left:1px solid var(--line)}
+#tools button{color:#617780}
+#tools button b{color:#29434c}
+#tools button:hover{background:#edf8f6;color:#126f6b;border-color:#d2ebe7}
+#tools button.on{background:linear-gradient(145deg,#0e948a,#08756f);border-color:#0b8d83;color:#fff;box-shadow:0 4px 12px rgba(8,127,120,.17)}
+#tools button.on b{color:#fff}
+#mid{background:#f1f6f7}
+#ctx{background:#fff;color:var(--tx);border-bottom:1px solid var(--line);box-shadow:0 2px 9px rgba(36,67,76,.04)}
+#ctx input[type=text],label.f input[type=text],label.f select,label.f input[type=number]{background:#fbfdfd;border:1px solid #d5e2e5;color:var(--tx)}
+#ctx input[type=text]:focus,label.f input:focus,label.f select:focus{border-color:var(--ac)}
+#ctx select{background:#fff;color:var(--tx)}
+#stage{background:radial-gradient(ellipse at center,#ffffff 0%,#edf3f4 76%)}
+#wrap{border:1px solid #d3e0e3;border-radius:7px;box-shadow:0 15px 42px rgba(39,67,76,.18)}
+#empty{color:#687e86}
+#empty div{background:rgba(255,255,255,.92);border:1.5px dashed #a9c9c7;border-radius:20px;box-shadow:0 10px 30px rgba(48,91,93,.08)}
+#empty b{color:#25424b}
+#st{background:#fff;color:#6d8189;border-top:1px solid var(--line)}
+aside{background:#fff;border-right:1px solid var(--line);box-shadow:-5px 0 22px rgba(40,70,80,.04)}
+.tabs{background:#fff;border-bottom:1px solid var(--line)}
+.tabs button{background:#f5f9fa;border-color:#dfe8ea;color:#506770}
+.tabs button:hover{background:#edf8f6;color:#08756f;border-color:#b9ded8}
+.tabs button.on{background:linear-gradient(135deg,#e0f5f1,#c9eee8);border-color:#93d5cc;color:#086b65}
+.pn{color:var(--tx)}
+.pn p{color:var(--mu)}
+label.r,label.f,label.k{color:#314b55}
+output{color:#73868e}
+input[type=range]{accent-color:var(--ac)}
+input[type=checkbox]{accent-color:var(--ac)}
+input[type=color]{border-radius:7px}
+input,select,textarea{color:var(--tx)}
+input::placeholder{color:#91a2a8;opacity:1}
+select option{background:#fff;color:#20323b}
+.g2 .btn{background:#fff}
+.pf button,.th button{background:#f7fafb;border-color:#dce7e9;color:#314b55}
+.pf button:hover,.th button:hover{background:#eef8f6;border-color:var(--ac);color:#086f69}
+.sw{border-color:#bdcdd1;box-shadow:0 1px 3px rgba(30,60,70,.12)}
+.g3 button{background:#f5f9fa;border-color:#d5e2e5}
+.g3 button.on{background:#0f9b91;border-color:#0f9b91}
+h3{color:#087d76;border-bottom:1px solid #e4eeee}
+#toast{background:#087f78;color:#fff;border:1px solid #35b5a8;box-shadow:0 8px 24px rgba(20,65,70,.2)}
+:focus-visible{outline:2px solid #d28a29;outline-offset:2px}
+html[data-theme=dark]{color-scheme:dark;--bg:#111d2b;--card:#18283a;--soft:#21344a;--line:#344b60;--ac:#51cbbb;--ac2:#087f78;--tx:#edf5f7;--mu:#a4b7bf;--hl:#edc477;--ck1:#2b4055;--ck2:#203248}
+html[data-theme=dark] body{background:radial-gradient(ellipse at 50% -20%,#203a4e 0%,var(--bg) 60%)}
+html[data-theme=dark] header,html[data-theme=dark] aside,html[data-theme=dark] .tabs,html[data-theme=dark] #ctx,html[data-theme=dark] #st{background:var(--card)}
+html[data-theme=dark] #tools{background:var(--card)}
+html[data-theme=dark] #mid{background:var(--bg)}
+html[data-theme=dark] #ctx input[type=text],html[data-theme=dark] label.f input[type=text],html[data-theme=dark] label.f select,html[data-theme=dark] label.f input[type=number],html[data-theme=dark] .btn,html[data-theme=dark] .tabs button,html[data-theme=dark] .pf button,html[data-theme=dark] .th button,html[data-theme=dark] .g3 button{background:var(--soft);color:var(--tx);border-color:var(--line)}
+html[data-theme=dark] #stage{background:#101b28}
+html[data-theme=dark] #empty div{background:var(--card)}
+html[data-theme=dark] #empty b,html[data-theme=dark] #tools button b{color:var(--tx)}
+html[data-theme=dark] h1{color:#eafcf9}
+html[data-theme=dark] h3{color:#7fe4d5}
+html[data-theme=dark] .tabs button.on{background:#0d827a;color:#fff}
+html[data-theme=dark] .btn.pri{background:#087f78;color:#fff}
+html[data-theme=sepia]{color-scheme:light}
+html[data-theme=sepia] #ctx,html[data-theme=sepia] header,html[data-theme=sepia] aside,html[data-theme=sepia] .tabs,html[data-theme=sepia] #st{background:var(--card)}
+html[data-theme=sepia] .btn,html[data-theme=sepia] .tabs button,html[data-theme=sepia] .pf button,html[data-theme=sepia] .th button{background:var(--soft);color:var(--tx)}
+@media(max-width:860px){#tools{background:#fbfdfd}html[data-theme=dark] #tools{background:var(--card)}}
+
 </style>
 </head>
 <body>
 <header>
-  <h1>ویرایشگر تصویر دکتر خسته</h1>
+  <h1>DrNote <small>استودیوی تصویر پزشکی</small></h1>
   <button class="btn" id="open">باز کردن تصویر</button>
   <input type="file" id="file" accept="image/*" hidden>
   <button class="btn" id="undo" disabled>واگرد</button>
@@ -89,13 +232,13 @@ html[data-theme=sepia]{--bg:#efe8d8;--card:#fbf8f0;--soft:#f4eedf;--line:#d8ccb4
   <nav id="tools" aria-label="ابزارها"></nav>
   <div id="mid">
     <div id="ctx">
-      <span data-t="pen hl line arrow rect ell text mark mos blr spot lens" style="display:flex;gap:6px;align-items:center">
+      <span data-t="pen hl line arrow rect ell text callout measure redact mark mos blr spot lens" style="display:flex;gap:6px;align-items:center">
         <input type="color" id="col" value="#ef4444" aria-label="رنگ">
         <span id="sws" style="display:flex;gap:4px"></span>
         <span>اندازه</span><input type="range" id="sz" min="1" max="40" value="8" style="width:110px">
       </span>
       <label data-t="rect ell"><input type="checkbox" id="fill"> توپر</label>
-      <span data-t="text" style="display:flex;gap:8px;align-items:center"><input type="text" id="txt" value="متن نمونه"><select id="tf" class="btn"><option>Vazirmatn</option><option>Tahoma</option><option>Georgia</option><option>Courier New</option><option>Impact</option></select><label><input type="checkbox" id="tbg" checked> پس‌زمینه متن</label></span>
+      <span data-t="text callout" style="display:flex;gap:8px;align-items:center"><input type="text" id="txt" value="متن نمونه"><select id="tf" class="btn"><option>Vazirmatn</option><option>Tahoma</option><option>Georgia</option><option>Courier New</option><option>Impact</option></select><label><input type="checkbox" id="tbg" checked> پس‌زمینه متن</label></span>
       <button class="btn" data-t="mark" id="mk0">شماره‌گذاری از ۱</button>
       <span data-t="crop" style="display:flex;gap:8px;align-items:center">
         <select id="asp" class="btn"><option value="0">آزاد</option><option value="1">۱:۱</option><option value="1.3333">۴:۳</option><option value="1.7778">۱۶:۹</option><option value="0.75">۳:۴</option><option value="0.5625">۹:۱۶</option></select>
@@ -104,7 +247,7 @@ html[data-theme=sepia]{--bg:#efe8d8;--card:#fbf8f0;--soft:#f4eedf;--line:#d8ccb4
     </div>
     <div id="stage">
       <div id="wrap"><canvas id="cv"></canvas><canvas id="ov"></canvas></div>
-      <div id="empty"><div><b>تصویر را اینجا رها کنید</b><p>یا دکمه «باز کردن تصویر» را بزنید. با Ctrl+V هم می‌توانید از کلیپ‌بورد بچسبانید.</p></div></div>
+      <div id="empty"><div><b>تصویر آموزشی را اینجا رها کنید</b><p>برای شروع تصویر را باز کنید یا اینجا رها کنید. با Ctrl+V هم می‌توانید از کلیپ‌بورد بچسبانید.</p></div></div>
     </div>
     <div id="st"><span id="dim">—</span><span id="zl"></span></div>
   </div>
@@ -133,7 +276,7 @@ const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('on');clearT
 
 /* ---------- UI build ---------- */
 const R=(l,a,k,mn,mx,v,st=1)=>`<label class="r">${l}<output>${v}</output><input type="range" data-${a}="${k}" min="${mn}" max="${mx}" step="${st}" value="${v}"></label>`;
-const TOOLS=[['none','↖','نشانگر'],['crop','✂','برش'],['pen','✎','قلم'],['hl','▬','ماژیک'],['line','╱','خط'],['arrow','➜','پیکان'],['rect','▭','مستطیل'],['ell','◯','بیضی'],['text','T','متن'],['mark','①','شماره'],['mos','▦','موزاییک'],['blr','◌','محو'],['spot','◐','کانون'],['lens','⊕','ذره‌بین']];
+const TOOLS=[['none','↖','نشانگر'],['crop','✂','برش'],['pen','✎','قلم'],['hl','▬','ماژیک'],['line','╱','خط'],['arrow','➜','پیکان'],['rect','▭','مستطیل'],['ell','◯','بیضی'],['text','T','متن'],['callout','⌁','برچسب'],['mark','①','شماره'],['measure','↔','اندازه‌گیری'],['redact','▰','پوشاندن'],['mos','▦','موزاییک'],['blr','◌','محو'],['spot','◐','کانون'],['lens','⊕','ذره‌بین']];
 $('#tools').innerHTML=TOOLS.map(t=>`<button data-tool="${t[0]}"><b>${t[1]}</b>${t[2]}</button>`).join('');
 $('#sws').innerHTML=['#ef4444','#fde047','#14b8a6','#3b82f6','#ffffff','#000000'].map(c=>`<button class="sw" data-c="${c}" style="background:${c}" aria-label="${c}"></button>`).join('');
 const TABS=[['adj','تنظیم'],['flt','فیلتر'],['wm','واترمارک'],['frm','قاب و حاشیه'],['trn','تبدیل'],['exp','خروجی'],['tpl','قالب‌ها']];
@@ -170,7 +313,8 @@ $('#p-trn').innerHTML=`<h3>چرخش و آینه</h3><div class="g2"><button clas
 <h3>تغییر اندازه</h3><label class="f">عرض (px)<input type="number" id="rw" min="1"></label><label class="f">ارتفاع (px)<input type="number" id="rh" min="1"></label><label class="k"><input type="checkbox" id="lock" checked> حفظ نسبت</label><button class="btn pri" id="rz">اعمال اندازه جدید</button>
 <h3>اندازه‌های آماده سایت</h3><label class="f">اندازه<select id="ps"><option value="1200x630">کاور وبلاگ ۱۲۰۰×۶۳۰</option><option value="1280x720">بندانگشتی ۱۲۸۰×۷۲۰</option><option value="1080x1080">مربع ۱۰۸۰</option><option value="1080x1350">پست عمودی ۱۰۸۰×۱۳۵۰</option><option value="1080x1920">استوری ۱۰۸۰×۱۹۲۰</option><option value="800x600">درسنامه ۸۰۰×۶۰۰</option></select></label>
 <label class="f">روش<select id="pm"><option value="cover">پر کردن (با برش)</option><option value="contain">جا دادن (پس‌زمینه محو)</option></select></label><button class="btn pri" id="pa">اعمال اندازه آماده</button>
-<h3>صاف کردن (چرخش آزاد)</h3><label class="r">زاویه<output>0</output><input type="range" id="ang" min="-45" max="45" step="0.5" value="0"></label><button class="btn" id="angb">اعمال زاویه</button>`;
+<h3>صاف کردن (چرخش آزاد)</h3><label class="r">زاویه<output>0</output><input type="range" id="ang" min="-45" max="45" step="0.5" value="0"></label><button class="btn" id="angb">اعمال زاویه</button>
+<h3>چیدمان چند تصویر پزشکی</h3><p style="color:var(--mu);font-size:12px;margin:4px 0 8px">تا ۴ تصویر را در یک شکل چندبخشی کنار هم قرار بده. تصویر فعلی جایگزین می‌شود و با «واگرد» قابل برگشت است.</p><input type="file" id="collageFiles" accept="image/*" multiple hidden><div class="g2"><button class="btn" id="collagePick">انتخاب تصاویر</button><button class="btn pri" id="collageMake">ساخت چیدمان</button></div><small id="collageCount" style="color:var(--mu)">هنوز تصویری انتخاب نشده</small>`;
 $('#p-exp').innerHTML=`<label class="f">فرمت<select id="xf"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option value="image/webp">WebP</option></select></label>
 <label class="r">کیفیت (JPG/WebP)<output>90</output><input type="range" id="xq" min="30" max="100" value="90"></label>
 <label class="f">حداکثر عرض<input type="number" id="xmw" placeholder="بدون محدودیت"></label>
@@ -263,7 +407,7 @@ const O=()=>({col:$('#col').value,sz:+$('#sz').value,fill:$('#fill').checked,txt
 function pos(e){const r=ov.getBoundingClientRect(),p=P(base);return[(e.clientX-r.left)*ov.width/r.width-p,(e.clientY-r.top)*ov.height/r.height-p]}
 const clampP=p=>[Math.max(0,Math.min(base.width,p[0])),Math.max(0,Math.min(base.height,p[1]))];
 function paint(x,t,d,o){
- const w=base.width,lw=Math.max(1,w*o.sz/1500),a=d.a,b=d.b||a;
+ const w=base.width,h=base.height,lw=Math.max(1,w*o.sz/1500),a=d.a,b=d.b||a;
  x.save();x.lineCap=x.lineJoin='round';x.strokeStyle=x.fillStyle=o.col;x.lineWidth=lw;
  if(t==='pen'||t==='hl'){if(t==='hl'){x.globalAlpha=.35;x.lineWidth=lw*4;x.lineCap='square'}
   x.beginPath();d.pts.forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));if(d.pts.length==1)x.lineTo(a[0]+.1,a[1]);x.stroke()}
@@ -271,6 +415,9 @@ function paint(x,t,d,o){
   if(t==='arrow'){const n=Math.atan2(b[1]-a[1],b[0]-a[0]),L=lw*5;x.beginPath();x.moveTo(b[0],b[1]);x.lineTo(b[0]-L*Math.cos(n-.45),b[1]-L*Math.sin(n-.45));x.lineTo(b[0]-L*Math.cos(n+.45),b[1]-L*Math.sin(n+.45));x.closePath();x.fill()}}
  else if(t==='rect'){const r=[Math.min(a[0],b[0]),Math.min(a[1],b[1]),Math.abs(b[0]-a[0]),Math.abs(b[1]-a[1])];o.fill?x.fillRect(...r):x.strokeRect(...r)}
  else if(t==='ell'){x.beginPath();x.ellipse((a[0]+b[0])/2,(a[1]+b[1])/2,Math.abs(b[0]-a[0])/2,Math.abs(b[1]-a[1])/2,0,0,7);o.fill?x.fill():x.stroke()}
+ else if(t==='measure'){const dist=Math.hypot(b[0]-a[0],b[1]-a[1]);const ang=Math.atan2(b[1]-a[1],b[0]-a[0]);x.strokeStyle=o.col;x.lineWidth=lw;x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1]);x.stroke();[a,b].forEach((p,i)=>{const aa=ang+(i?Math.PI:0),L=lw*4;x.beginPath();x.moveTo(p[0],p[1]);x.lineTo(p[0]-L*Math.cos(aa-.55),p[1]-L*Math.sin(aa-.55));x.moveTo(p[0],p[1]);x.lineTo(p[0]-L*Math.cos(aa+.55),p[1]-L*Math.sin(aa+.55));x.stroke()});const fs=Math.max(14,w*o.sz/700);x.font=`700 ${fs}px Vazirmatn,Tahoma,sans-serif`;const label=dist.toFixed(1)+' px',tw=x.measureText(label).width;x.fillStyle='rgba(8,20,34,.88)';x.fillRect((a[0]+b[0])/2-tw/2-fs*.35,(a[1]+b[1])/2-fs*.9,tw+fs*.7,fs*1.8);x.fillStyle=o.col;x.textAlign='center';x.textBaseline='middle';x.fillText(label,(a[0]+b[0])/2,(a[1]+b[1])/2)}
+ else if(t==='redact'){const r=[Math.min(a[0],b[0]),Math.min(a[1],b[1]),Math.abs(b[0]-a[0]),Math.abs(b[1]-a[1])];x.fillStyle='#000';x.fillRect(...r)}
+ else if(t==='callout'&&o.txt){const fs=Math.max(13,w*o.sz/700),maxW=w*.42,pad=fs*.55;x.font=`700 ${fs}px "${o.tf}",Vazirmatn,Tahoma,sans-serif`;const words=o.txt.split(/\s+/),lines=[];let line='';for(const word of words){const test=line?line+' '+word:word;if(x.measureText(test).width>maxW-pad*2&&line){lines.push(line);line=word}else line=test}if(line)lines.push(line);const tw=Math.min(maxW,Math.max(...lines.map(v=>x.measureText(v).width))+pad*2),th=lines.length*fs*1.35+pad*1.1;let bx=a[0]+fs*1.35,by=a[1]-th-fs*.35;if(bx+tw>w-4)bx=a[0]-tw-fs*1.35;if(bx<4)bx=4;if(by<4)by=Math.min(h-th-4,a[1]+fs*.8);by=Math.max(4,by);x.strokeStyle=o.col;x.lineWidth=Math.max(2,lw*.65);x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(bx>a[0]?bx:bx+tw,by+th*.55);x.stroke();x.fillStyle=o.col;x.beginPath();x.arc(a[0],a[1],Math.max(4,lw*1.9),0,7);x.fill();x.fillStyle='rgba(9,23,39,.94)';x.beginPath();x.roundRect(bx,by,tw,th,fs*.32);x.fill();x.strokeStyle=o.col;x.lineWidth=Math.max(1.5,lw*.5);x.stroke();x.fillStyle='#fff';x.textAlign='right';x.textBaseline='middle';lines.forEach((v,i)=>x.fillText(v,bx+tw-pad,by+pad*.6+fs*.65+i*fs*1.35))}
  else if(t==='text'&&o.txt){const fs=w*o.sz/250;x.font=`700 ${fs}px "${o.tf}",Vazirmatn,Tahoma,sans-serif`;x.textAlign='center';x.textBaseline='middle';
   if(o.bg){const tw=x.measureText(o.txt).width;x.fillStyle='rgba(15,23,42,.72)';x.beginPath();x.roundRect(a[0]-tw/2-fs*.5,a[1]-fs*.8,tw+fs,fs*1.6,fs*.35);x.fill();x.fillStyle=o.col}else{x.shadowColor='rgba(0,0,0,.7)';x.shadowBlur=fs/5}
   x.fillText(o.txt,a[0],a[1])}
@@ -280,10 +427,10 @@ function paint(x,t,d,o){
 function region(d){const a=clampP(d.a),b=clampP(d.b||d.a);return[Math.round(Math.min(a[0],b[0])),Math.round(Math.min(a[1],b[1])),Math.round(Math.abs(b[0]-a[0])),Math.round(Math.abs(b[1]-a[1]))]}
 function paintOv(){ox.clearRect(0,0,ov.width,ov.height);if(!base)return;const p=P(base);ox.save();ox.translate(p,p);
  if(tool==='crop'&&crop){ox.fillStyle='rgba(0,0,0,.55)';ox.beginPath();ox.rect(-p,-p,ov.width,ov.height);ox.rect(crop.x,crop.y,crop.w,crop.h);ox.fill('evenodd');ox.strokeStyle='#14b8a6';ox.lineWidth=2/zoom;ox.setLineDash([8/zoom,5/zoom]);ox.strokeRect(crop.x,crop.y,crop.w,crop.h);$('#cinfo').textContent=`${Math.round(crop.w)} × ${Math.round(crop.h)}`}
- else if(drag&&drag.b){if(tool==='spot'){const r=region(drag);ox.fillStyle='rgba(0,0,0,.6)';ox.beginPath();ox.rect(0,0,base.width,base.height);ox.rect(...r);ox.fill('evenodd')}else if(tool==='lens'){const r=Math.hypot(drag.b[0]-drag.a[0],drag.b[1]-drag.a[1]);ox.strokeStyle='#e3b86b';ox.lineWidth=2/zoom;ox.beginPath();ox.arc(drag.a[0],drag.a[1],r,0,7);ox.stroke()}else if(tool==='mos'||tool==='blr'){const r=region(drag);ox.strokeStyle='#e3b86b';ox.lineWidth=2/zoom;ox.setLineDash([6/zoom,4/zoom]);ox.strokeRect(...r)}else paint(ox,tool,drag,O())}
+ else if(drag&&drag.b){if(tool==='spot'){const r=region(drag);ox.fillStyle='rgba(0,0,0,.6)';ox.beginPath();ox.rect(0,0,base.width,base.height);ox.rect(...r);ox.fill('evenodd')}else if(tool==='lens'){const r=Math.hypot(drag.b[0]-drag.a[0],drag.b[1]-drag.a[1]);ox.strokeStyle='#e3b86b';ox.lineWidth=2/zoom;ox.beginPath();ox.arc(drag.a[0],drag.a[1],r,0,7);ox.stroke()}else if(tool==='mos'||tool==='blr'||tool==='redact'){const r=region(drag);ox.strokeStyle=tool==='redact'?'#ef4444':'#e3b86b';ox.lineWidth=2/zoom;ox.setLineDash([6/zoom,4/zoom]);if(tool==='redact'){ox.fillStyle='rgba(0,0,0,.72)';ox.fillRect(...r)}ox.strokeRect(...r)}else paint(ox,tool,drag,O())}
  ox.restore()}
 ov.addEventListener('pointerdown',e=>{if(!base||tool==='none')return;ov.setPointerCapture(e.pointerId);const a=pos(e);drag={a,b:null,pts:[a]};
- if(tool==='text'||tool==='mark'){paint(base.getContext('2d'),tool,drag,O());if(tool==='mark')mk++;drag=null;commit()}});
+ if(tool==='text'||tool==='mark'||tool==='callout'){if(tool==='callout'){const value=prompt('متن برچسب آناتومی / توضیح کوتاه را وارد کنید:');if(value&&value.trim()){const opt=O();opt.txt=value.trim();paint(base.getContext('2d'),'callout',drag,opt);commit()}}else{paint(base.getContext('2d'),tool,drag,O());if(tool==='mark')mk++;commit()}drag=null;paintOv()}});
 ov.addEventListener('pointermove',e=>{if(!drag)return;const b=pos(e);drag.b=b;
  if(tool==='pen'||tool==='hl')drag.pts.push(b);
  if(tool==='crop'){const a=clampP(drag.a),c=clampP(b),asp=+$('#asp').value;let w=c[0]-a[0],h=c[1]-a[1];if(asp){h=Math.sign(h||1)*Math.abs(w)/asp}
@@ -294,6 +441,7 @@ ov.addEventListener('pointerup',()=>{if(!drag)return;const d=drag;drag=null;if(!
  const bx=base.getContext('2d');
  if(tool==='spot'){const[rx,ry,rw,rh]=region(d);if(rw>4&&rh>4){bx.save();bx.fillStyle='rgba(0,0,0,.62)';bx.beginPath();bx.rect(0,0,base.width,base.height);bx.rect(rx,ry,rw,rh);bx.fill('evenodd');bx.strokeStyle=O().col;bx.lineWidth=Math.max(2,base.width*O().sz/2500);bx.strokeRect(rx,ry,rw,rh);bx.restore();commit()}}
  else if(tool==='lens'){const r=Math.hypot(d.b[0]-d.a[0],d.b[1]-d.a[1]),ax=d.a[0],ay=d.a[1];if(r>8){const t=cp(base),o=O();bx.save();bx.beginPath();bx.arc(ax,ay,r,0,7);bx.clip();bx.translate(ax,ay);bx.scale(2.2,2.2);bx.drawImage(t,-ax,-ay);bx.restore();bx.save();bx.strokeStyle=o.col;bx.lineWidth=Math.max(2,base.width*o.sz/700);bx.shadowColor='rgba(0,0,0,.5)';bx.shadowBlur=bx.lineWidth*2;bx.beginPath();bx.arc(ax,ay,r,0,7);bx.stroke();bx.restore();commit()}}
+ else if(tool==='redact'){const[rx,ry,rw,rh]=region(d);if(rw>2&&rh>2){bx.fillStyle='#000';bx.fillRect(rx,ry,rw,rh);commit()}}
  else if(tool==='mos'||tool==='blr'){const[rx,ry,rw,rh]=region(d);if(rw>2&&rh>2){
    if(tool==='mos'){const s=Math.max(4,Math.round(base.width*+$('#sz').value/400)),t=mkc(Math.max(1,Math.ceil(rw/s)),Math.max(1,Math.ceil(rh/s))),tx=t.getContext('2d');tx.drawImage(base,rx,ry,rw,rh,0,0,t.width,t.height);bx.save();bx.imageSmoothingEnabled=false;bx.drawImage(t,0,0,t.width,t.height,rx,ry,rw,rh);bx.restore()}
    else{const t=cp(base);bx.save();bx.beginPath();bx.rect(rx,ry,rw,rh);bx.clip();bx.filter=`blur(${base.width*+$('#sz').value/500}px)`;bx.drawImage(t,0,0);bx.restore()}
@@ -339,12 +487,31 @@ $('#dl').onclick=$('#dl2').onclick=download;
 $('#copy').onclick=()=>{if(!base)return;const f=$('#xf').value;$('#xf').value='image/png';toBlob(base,b=>{navigator.clipboard.write([new ClipboardItem({'image/png':b})]).then(()=>toast('در کلیپ‌بورد کپی شد'),()=>toast('مرورگر اجازه کپی نداد'))});$('#xf').value=f};
 $('#bt').onchange=e=>{const fs=[...e.target.files];fs.forEach((f,i)=>loadImg(f,c=>toBlob(c,b=>setTimeout(()=>save(b,f.name.replace(/\.[^.]+$/,'')+'-edited'),i*400))));if(fs.length)toast(`در حال پردازش ${fs.length.toLocaleString('fa-IR')} تصویر…`);e.target.value=''};
 
+/* ---------- medical figure layout ---------- */
+let collageFiles=[];
+$('#collagePick').onclick=()=>$('#collageFiles').click();
+$('#collageFiles').onchange=e=>{collageFiles=[...e.target.files].slice(0,4);$('#collageCount').textContent=collageFiles.length?`${collageFiles.length.toLocaleString('fa-IR')} تصویر انتخاب شده`:'هنوز تصویری انتخاب نشده';if(e.target.files.length>4)toast('حداکثر ۴ تصویر اول انتخاب شدند');};
+$('#collageMake').onclick=()=>{
+ if(!collageFiles.length){toast('ابتدا ۱ تا ۴ تصویر انتخاب کنید');return}
+ const files=[...collageFiles];
+ Promise.all(files.map(f=>new Promise((resolve,reject)=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{URL.revokeObjectURL(u);resolve(im)};im.onerror=()=>{URL.revokeObjectURL(u);reject(new Error('image'))};im.src=u}))).then(imgs=>{
+  const cols=imgs.length===1?1:2,rows=Math.ceil(imgs.length/cols),cellW=1200,cellH=1050,gap=24,outer=42;
+  const out=mkc(outer*2+cols*cellW+(cols-1)*gap,outer*2+rows*cellH+(rows-1)*gap),x=out.getContext('2d');
+  x.fillStyle='#eaf0f4';x.fillRect(0,0,out.width,out.height);
+  imgs.forEach((im,i)=>{const col=i%cols,row=Math.floor(i/cols),px=outer+col*(cellW+gap),py=outer+row*(cellH+gap);x.fillStyle='#fff';x.shadowColor='rgba(15,35,55,.16)';x.shadowBlur=20;x.shadowOffsetY=5;x.fillRect(px,py,cellW,cellH);x.shadowColor='transparent';x.shadowBlur=0;x.shadowOffsetY=0;x.strokeStyle='#d4e0e8';x.lineWidth=3;x.strokeRect(px+1.5,py+1.5,cellW-3,cellH-3);
+   const pad=52,head=70,foot=35,availW=cellW-pad*2,availH=cellH-head-foot-pad,scale=Math.min(availW/im.width,availH/im.height),iw=im.width*scale,ih=im.height*scale,ix=px+(cellW-iw)/2,iy=py+head+(availH-ih)/2;
+   x.fillStyle='#0b827a';x.beginPath();x.arc(px+48,py+47,25,0,Math.PI*2);x.fill();x.fillStyle='#fff';x.font='700 26px Arial';x.textAlign='center';x.textBaseline='middle';x.fillText(String.fromCharCode(65+i),px+48,py+48);x.drawImage(im,ix,iy,iw,ih);
+  });
+  base=out;$('#empty').hidden=true;crop=null;commit();fit();toast('چیدمان چندتصویری ساخته شد؛ برای برگشت «واگرد» را بزنید');
+ }).catch(()=>toast('خواندن یکی از تصاویر ناموفق بود'));
+};
+
 /* ---------- init ---------- */
 $$('[data-fp]').forEach(b=>b.onclick=()=>{Object.assign(F,F0,FP[b.dataset.fp][1]);sync();fit()});
 $('#frs').onclick=()=>{Object.assign(F,F0);sync();fit()};
 $('#cmp').onpointerdown=()=>{orig=true;render()};['pointerup','pointerleave'].forEach(ev=>$('#cmp')['on'+ev]=()=>{if(orig){orig=false;render()}});
-const TH=['dark','light','sepia'],TN={dark:'تیره',light:'روشن',sepia:'سپیا'};let ti=0;try{ti=Math.max(0,TH.indexOf(localStorage.getItem('khth')))}catch(e){}
-function setTh(){document.documentElement.dataset.theme=TH[ti];$('#thm').textContent='تم: '+TN[TH[ti]];try{localStorage.setItem('khth',TH[ti])}catch(e){}}
+const TH=['light','dark','sepia'],TN={dark:'تیره',light:'روشن',sepia:'سپیا'};let ti=0;try{const saved=localStorage.getItem('khth-v2');if(saved&&TH.includes(saved))ti=TH.indexOf(saved)}catch(e){}
+function setTh(){document.documentElement.dataset.theme=TH[ti];$('#thm').textContent='تم: '+TN[TH[ti]];try{localStorage.setItem('khth-v2',TH[ti])}catch(e){}}
 $('#thm').onclick=()=>{ti=(ti+1)%3;setTh()};setTh();
 $('#p-tpl').innerHTML='<p style="color:var(--mu)">فیلتر، واترمارک و قاب فعلی را به‌صورت یک قالب ذخیره کنید تا روی همه تصویرهای سایت یکسان اعمال شود (پردازش دسته‌ای هم از آن استفاده می‌کند).</p><label class="f">نام قالب<input type="text" id="tn" placeholder="مثلاً درسنامه"></label><button class="btn pri" id="ts">ذخیره قالب فعلی</button><h3>قالب‌های ذخیره‌شده</h3><div id="tl"></div>';
 const TP=()=>{try{return JSON.parse(localStorage.getItem('khtpl')||'[]')}catch(e){return[]}};
