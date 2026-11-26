@@ -6,7 +6,7 @@
 <title>ویرایشگر تصویر دکتر خسته</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0f172a;--card:#1e293b;--soft:#172033;--line:#334155;--ac:#14b8a6;--ac2:#0f766e;--tx:#e2e8f0;--mu:#94a3b8;--hl:#e3b86b}
+:root{--bg:#0f172a;--card:#1e293b;--soft:#172033;--line:#334155;--ac:#14b8a6;--ac2:#0f766e;--tx:#e2e8f0;--mu:#94a3b8;--hl:#e3b86b;--ck1:#2a3548;--ck2:#222c3d}
 *{box-sizing:border-box}
 body{margin:0;height:100vh;display:flex;flex-direction:column;background:var(--bg);color:var(--tx);font:14px/1.6 Vazirmatn,Tahoma,sans-serif}
 button,input,select{font:inherit;color:inherit}
@@ -30,7 +30,7 @@ main{flex:1;display:grid;grid-template-columns:72px 1fr 330px;min-height:0}
 #ctx input[type=text]{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:3px 8px;width:170px}
 .sw{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);padding:0;cursor:pointer}
 #stage{flex:1;overflow:auto;display:flex;position:relative}
-#wrap{margin:auto;position:relative;line-height:0;background:conic-gradient(#2a3548 25%,#222c3d 0 50%,#2a3548 0 75%,#222c3d 0) 0 0/16px 16px;box-shadow:0 8px 40px #0008}
+#wrap{margin:auto;position:relative;line-height:0;background:conic-gradient(var(--ck1) 25%,var(--ck2) 0 50%,var(--ck1) 0 75%,var(--ck2) 0) 0 0/16px 16px;box-shadow:0 8px 40px #0008}
 #wrap canvas{display:block}
 #ov{position:absolute;inset:0}
 #empty[hidden]{display:none!important}
@@ -59,12 +59,16 @@ input[type=color]{width:44px;height:26px;border:none;background:none;padding:0}
 .pf button:hover,.th button:hover{border-color:var(--ac)}
 .pf i{display:block;height:34px;width:46px;margin:2px auto 5px}
 .th canvas{width:100%;border-radius:6px;display:block;margin-bottom:3px}
+.pal{display:flex;gap:6px;margin:6px 0;min-height:20px;flex-wrap:wrap}
+.tp{display:flex;gap:6px;align-items:center;margin:6px 0}.tp span{flex:1}
 .g3{display:grid;grid-template-columns:repeat(3,34px);gap:4px;direction:ltr;margin:6px 0}
 .g3 button{height:34px;border:1px solid var(--line);background:var(--soft);border-radius:6px;cursor:pointer}
 .g3 button.on{background:var(--ac);border-color:var(--ac)}
 h3{font-size:13px;color:var(--hl);margin:16px 0 4px;font-weight:600}
 #toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--ac2);color:#fff;padding:8px 18px;border-radius:10px;opacity:0;transition:.25s;pointer-events:none}
 #toast.on{opacity:1}
+html[data-theme=light]{--bg:#e2e8f0;--card:#fff;--soft:#f1f5f9;--line:#cbd5e1;--tx:#0f172a;--mu:#64748b;--ck1:#dbe2ec;--ck2:#eef2f7}
+html[data-theme=sepia]{--bg:#efe8d8;--card:#fbf8f0;--soft:#f4eedf;--line:#d8ccb4;--tx:#3b3226;--mu:#8a7b63;--ck1:#e6dcc4;--ck2:#f1e9d6}
 @media(max-width:860px){body{height:auto;min-height:100vh}main{grid-template-columns:1fr;grid-template-rows:auto 60vh auto}#tools{flex-direction:row;border:none;border-bottom:1px solid var(--line)}#tools button{min-width:58px}aside{border:none}}
 </style>
 </head>
@@ -77,6 +81,7 @@ h3{font-size:13px;color:var(--hl);margin:16px 0 4px;font-weight:600}
   <button class="btn" id="redo" disabled>ازنو</button>
   <span class="sp"></span>
   <button class="btn" id="zo">−</button><button class="btn" id="zf">اندازه صفحه</button><button class="btn" id="z1">۱۰۰٪</button><button class="btn" id="zi">+</button>
+  <button class="btn" id="thm">تم</button>
   <button class="btn" id="cmp" title="نگه دارید تا تصویر اصلی را ببینید">مقایسه با اصلی</button>
   <button class="btn pri" id="dl">دانلود تصویر</button>
 </header>
@@ -84,13 +89,13 @@ h3{font-size:13px;color:var(--hl);margin:16px 0 4px;font-weight:600}
   <nav id="tools" aria-label="ابزارها"></nav>
   <div id="mid">
     <div id="ctx">
-      <span data-t="pen hl line arrow rect ell text mark mos blr" style="display:flex;gap:6px;align-items:center">
+      <span data-t="pen hl line arrow rect ell text mark mos blr spot lens" style="display:flex;gap:6px;align-items:center">
         <input type="color" id="col" value="#ef4444" aria-label="رنگ">
         <span id="sws" style="display:flex;gap:4px"></span>
         <span>اندازه</span><input type="range" id="sz" min="1" max="40" value="8" style="width:110px">
       </span>
       <label data-t="rect ell"><input type="checkbox" id="fill"> توپر</label>
-      <span data-t="text" style="display:flex;gap:8px;align-items:center"><input type="text" id="txt" value="متن نمونه"><label><input type="checkbox" id="tbg" checked> پس‌زمینه متن</label></span>
+      <span data-t="text" style="display:flex;gap:8px;align-items:center"><input type="text" id="txt" value="متن نمونه"><select id="tf" class="btn"><option>Vazirmatn</option><option>Tahoma</option><option>Georgia</option><option>Courier New</option><option>Impact</option></select><label><input type="checkbox" id="tbg" checked> پس‌زمینه متن</label></span>
       <button class="btn" data-t="mark" id="mk0">شماره‌گذاری از ۱</button>
       <span data-t="crop" style="display:flex;gap:8px;align-items:center">
         <select id="asp" class="btn"><option value="0">آزاد</option><option value="1">۱:۱</option><option value="1.3333">۴:۳</option><option value="1.7778">۱۶:۹</option><option value="0.75">۳:۴</option><option value="0.5625">۹:۱۶</option></select>
@@ -111,29 +116,30 @@ h3{font-size:13px;color:var(--hl);margin:16px 0 4px;font-weight:600}
     <div class="pn" id="p-frm" hidden></div>
     <div class="pn" id="p-trn" hidden></div>
     <div class="pn" id="p-exp" hidden></div>
+    <div class="pn" id="p-tpl" hidden></div>
   </aside>
 </main>
 <div id="toast"></div>
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const cv=$('#cv'),ov=$('#ov'),ox=ov.getContext('2d');
-let base,hist=[],hi=-1,zoom=1,tool='none',drag=null,crop=null,mk=1,fname='image',rq,orig=false;
-const S0={b:100,c:100,s:100,h:0,bl:0,g:0,se:0,t:0,v:0},S={...S0};
+let base,hist=[],hi=-1,zoom=1,tool='none',drag=null,crop=null,mk=1,fname='image',rq,orig=false,ver=0;
+const S0={b:100,c:100,s:100,h:0,bl:0,g:0,se:0,t:0,v:0,sh:0,n:0},S={...S0};
 const W={on:false,type:'text',text:'دکتر خسته',font:'Vazirmatn',size:5,color:'#ffffff',op:55,rot:-25,pos:'br',tile:false,m:3,shadow:true,img:null,imgData:''};
-const F0={pad:0,bot:0,color:'#ffffff',color2:'#14b8a6',grad:false,gang:135,trans:false,rad:0,orad:0,bw:0,bc:'#14b8a6',ow:0,oc:'#0f766e',sh:0,cap:'',capc:'#334155'},F={...F0};
+const F0={pad:0,bot:0,color:'#ffffff',color2:'#14b8a6',grad:false,gang:135,bgb:false,trans:false,rad:0,orad:0,bw:0,bc:'#14b8a6',ow:0,oc:'#0f766e',sh:0,cap:'',capc:'#334155'},F={...F0};
 const mkc=(w,h)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c};
 const cp=c=>{const n=mkc(c.width,c.height);n.getContext('2d').drawImage(c,0,0);return n};
 const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2200)};
 
 /* ---------- UI build ---------- */
 const R=(l,a,k,mn,mx,v,st=1)=>`<label class="r">${l}<output>${v}</output><input type="range" data-${a}="${k}" min="${mn}" max="${mx}" step="${st}" value="${v}"></label>`;
-const TOOLS=[['none','↖','نشانگر'],['crop','✂','برش'],['pen','✎','قلم'],['hl','▬','ماژیک'],['line','╱','خط'],['arrow','➜','پیکان'],['rect','▭','مستطیل'],['ell','◯','بیضی'],['text','T','متن'],['mark','①','شماره'],['mos','▦','موزاییک'],['blr','◌','محو']];
+const TOOLS=[['none','↖','نشانگر'],['crop','✂','برش'],['pen','✎','قلم'],['hl','▬','ماژیک'],['line','╱','خط'],['arrow','➜','پیکان'],['rect','▭','مستطیل'],['ell','◯','بیضی'],['text','T','متن'],['mark','①','شماره'],['mos','▦','موزاییک'],['blr','◌','محو'],['spot','◐','کانون'],['lens','⊕','ذره‌بین']];
 $('#tools').innerHTML=TOOLS.map(t=>`<button data-tool="${t[0]}"><b>${t[1]}</b>${t[2]}</button>`).join('');
 $('#sws').innerHTML=['#ef4444','#fde047','#14b8a6','#3b82f6','#ffffff','#000000'].map(c=>`<button class="sw" data-c="${c}" style="background:${c}" aria-label="${c}"></button>`).join('');
-const TABS=[['adj','تنظیم'],['flt','فیلتر'],['wm','واترمارک'],['frm','قاب و حاشیه'],['trn','تبدیل'],['exp','خروجی']];
+const TABS=[['adj','تنظیم'],['flt','فیلتر'],['wm','واترمارک'],['frm','قاب و حاشیه'],['trn','تبدیل'],['exp','خروجی'],['tpl','قالب‌ها']];
 $('#tabs').innerHTML=TABS.map(t=>`<button data-tab="${t[0]}">${t[1]}</button>`).join('');
-const PR={'اصلی':{},'اتوماتیک':{b:104,c:112,s:118},'روشن':{b:115,c:105},'پرجنب‌وجوش':{s:145,c:110},'سیاه‌وسفید':{g:100,c:112},'قدیمی':{se:80,c:90,b:105},'سرد':{t:-45,s:110},'گرم':{t:45,s:115,b:105},'کنتراست بالا':{c:155},'محو':{c:85,b:112,s:80},'سینمایی':{c:122,s:90,v:45,t:-20},'وینتیج':{se:45,v:55,c:95,b:105}};
-$('#p-adj').innerHTML=R('روشنایی','s','b',0,200,100)+R('کنتراست','s','c',0,200,100)+R('اشباع رنگ','s','s',0,200,100)+R('چرخش طیف رنگ','s','h',-180,180,0)+R('محو کردن','s','bl',0,20,0)+R('سیاه‌وسفید','s','g',0,100,0)+R('سپیا','s','se',0,100,0)+R('دمای رنگ (سرد ← گرم)','s','t',-100,100,0)+R('وینیت (تیره شدن لبه‌ها)','s','v',0,100,0)+'<button class="btn" id="rs">بازنشانی تنظیمات</button>';
+const PR={'اصلی':{},'اتوماتیک':{b:104,c:112,s:118},'روشن':{b:115,c:105},'پرجنب‌وجوش':{s:145,c:110},'سیاه‌وسفید':{g:100,c:112},'قدیمی':{se:80,c:90,b:105},'سرد':{t:-45,s:110},'گرم':{t:45,s:115,b:105},'کنتراست بالا':{c:155},'محو':{c:85,b:112,s:80},'سینمایی':{c:122,s:90,v:45,t:-20,n:18},'وینتیج':{se:45,v:55,c:95,b:105,n:30}};
+$('#p-adj').innerHTML=R('روشنایی','s','b',0,200,100)+R('کنتراست','s','c',0,200,100)+R('اشباع رنگ','s','s',0,200,100)+R('چرخش طیف رنگ','s','h',-180,180,0)+R('محو کردن','s','bl',0,20,0)+R('سیاه‌وسفید','s','g',0,100,0)+R('سپیا','s','se',0,100,0)+R('دمای رنگ (سرد ← گرم)','s','t',-100,100,0)+R('وینیت (تیره شدن لبه‌ها)','s','v',0,100,0)+R('وضوح (شارپ)','s','sh',0,100,0)+R('دانه فیلم (گرین)','s','n',0,100,0)+'<button class="btn" id="rs">بازنشانی تنظیمات</button>';
 $('#p-flt').innerHTML='<div class="th" id="th"></div>';
 $('#p-wm').innerHTML=`<label class="k"><input type="checkbox" data-w="on"> فعال‌سازی واترمارک</label>
 <label class="f">نوع<select data-w="type"><option value="text">متن</option><option value="img">لوگو (تصویر)</option></select></label>
@@ -156,17 +162,20 @@ const FP=[['بدون قاب',{},'background:#334155'],
 ['شفاف با سایه',{pad:9,trans:true,sh:18,rad:8},'background:#64748b;border-radius:6px;box-shadow:0 6px 10px #000a']];
 $('#p-frm').innerHTML='<h3>قاب‌های آماده</h3><div class="pf">'+FP.map((f,i)=>`<button data-fp="${i}"><i style="${f[2]}"></i>${f[0]}</button>`).join('')+'</div>'+
 '<h3>حاشیه</h3>'+R('اندازه حاشیه دور تصویر','f','pad',0,30,0,.5)+R('فضای اضافه پایین (حالت پولاروید)','f','bot',0,40,0)+'<label class="f">متن زیر عکس<input type="text" data-f="cap"></label><label class="f">رنگ متن<input type="color" data-f="capc"></label>'+
-'<h3>رنگ پس‌زمینه حاشیه</h3><label class="f">رنگ اول<input type="color" data-f="color"></label><label class="k"><input type="checkbox" data-f="grad"> گرادینت</label><label class="f">رنگ دوم<input type="color" data-f="color2"></label>'+R('زاویه گرادینت','f','gang',0,360,135)+'<label class="k"><input type="checkbox" data-f="trans"> پس‌زمینه شفاف (PNG/WebP)</label>'+
-'<h3>خط دور عکس</h3>'+R('ضخامت','f','bw',0,40,0)+'<label class="f">رنگ<input type="color" data-f="bc"></label>'+
+'<h3>رنگ پس‌زمینه حاشیه</h3><label class="f">رنگ اول<input type="color" data-f="color"></label><div class="pal" id="pal1" title="رنگ‌های همین عکس"></div><label class="k"><input type="checkbox" data-f="bgb"> پس‌زمینه محو‌شده از خود عکس</label><label class="k"><input type="checkbox" data-f="grad"> گرادینت</label><label class="f">رنگ دوم<input type="color" data-f="color2"></label>'+R('زاویه گرادینت','f','gang',0,360,135)+'<label class="k"><input type="checkbox" data-f="trans"> پس‌زمینه شفاف (PNG/WebP)</label>'+
+'<h3>خط دور عکس</h3>'+R('ضخامت','f','bw',0,40,0)+'<label class="f">رنگ<input type="color" data-f="bc"></label><div class="pal" id="pal2" title="رنگ‌های همین عکس"></div>'+
 '<h3>خط دور قاب</h3>'+R('ضخامت','f','ow',0,40,0)+'<label class="f">رنگ<input type="color" data-f="oc"></label>'+
 '<h3>گوشه‌ها و سایه</h3>'+R('گردی گوشه عکس','f','rad',0,100,0)+R('گردی گوشه قاب','f','orad',0,100,0)+R('سایه','f','sh',0,30,0)+'<button class="btn" id="frs">حذف قاب و حاشیه</button>';
 $('#p-trn').innerHTML=`<h3>چرخش و آینه</h3><div class="g2"><button class="btn" id="rl">چرخش ۹۰° چپ</button><button class="btn" id="rr">چرخش ۹۰° راست</button><button class="btn" id="fh">آینه افقی</button><button class="btn" id="fv">آینه عمودی</button></div>
-<h3>تغییر اندازه</h3><label class="f">عرض (px)<input type="number" id="rw" min="1"></label><label class="f">ارتفاع (px)<input type="number" id="rh" min="1"></label><label class="k"><input type="checkbox" id="lock" checked> حفظ نسبت</label><button class="btn pri" id="rz">اعمال اندازه جدید</button>`;
+<h3>تغییر اندازه</h3><label class="f">عرض (px)<input type="number" id="rw" min="1"></label><label class="f">ارتفاع (px)<input type="number" id="rh" min="1"></label><label class="k"><input type="checkbox" id="lock" checked> حفظ نسبت</label><button class="btn pri" id="rz">اعمال اندازه جدید</button>
+<h3>اندازه‌های آماده سایت</h3><label class="f">اندازه<select id="ps"><option value="1200x630">کاور وبلاگ ۱۲۰۰×۶۳۰</option><option value="1280x720">بندانگشتی ۱۲۸۰×۷۲۰</option><option value="1080x1080">مربع ۱۰۸۰</option><option value="1080x1350">پست عمودی ۱۰۸۰×۱۳۵۰</option><option value="1080x1920">استوری ۱۰۸۰×۱۹۲۰</option><option value="800x600">درسنامه ۸۰۰×۶۰۰</option></select></label>
+<label class="f">روش<select id="pm"><option value="cover">پر کردن (با برش)</option><option value="contain">جا دادن (پس‌زمینه محو)</option></select></label><button class="btn pri" id="pa">اعمال اندازه آماده</button>
+<h3>صاف کردن (چرخش آزاد)</h3><label class="r">زاویه<output>0</output><input type="range" id="ang" min="-45" max="45" step="0.5" value="0"></label><button class="btn" id="angb">اعمال زاویه</button>`;
 $('#p-exp').innerHTML=`<label class="f">فرمت<select id="xf"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option value="image/webp">WebP</option></select></label>
 <label class="r">کیفیت (JPG/WebP)<output>90</output><input type="range" id="xq" min="30" max="100" value="90"></label>
 <label class="f">حداکثر عرض<input type="number" id="xmw" placeholder="بدون محدودیت"></label>
 <label class="f">نام فایل<input type="text" id="xn"></label>
-<div class="g2"><button class="btn pri" id="dl2">دانلود</button><button class="btn" id="copy">کپی در کلیپ‌بورد</button></div>
+<div class="g2"><button class="btn pri" id="dl2">دانلود</button><button class="btn" id="copy">کپی در کلیپ‌بورد</button></div><div class="f" style="display:flex;gap:10px;align-items:center"><button class="btn" id="est">تخمین حجم فایل</button><b id="xs"></b></div>
 <h3>پردازش دسته‌ای</h3><p style="color:var(--mu);margin:0 0 8px">چند تصویر را انتخاب کنید؛ تنظیمات، فیلتر، واترمارک و قاب فعلی روی همه اعمال و هرکدام جداگانه دانلود می‌شود.</p><input type="file" id="bt" accept="image/*" multiple>`;
 
 /* ---------- state sync ---------- */
@@ -199,7 +208,14 @@ function wm(x,x0,y0,w,h){
  else{const m=w*W.m/100,a=W.pos[0],b=W.pos[1];
   one(b=='l'?x0+m+ew/2:b=='c'?x0+w/2:x0+w-m-ew/2,a=='t'?y0+m+eh/2:a=='m'?y0+h/2:y0+h-m-eh/2,r)}
  x.restore()}
+let nz;function noise(){if(nz)return nz;nz=mkc(256,256);const x=nz.getContext('2d'),id=x.createImageData(256,256);for(let i=0;i<id.data.length;i+=4){id.data[i]=id.data[i+1]=id.data[i+2]=Math.random()*255;id.data[i+3]=255}x.putImageData(id,0,0);return nz}
+let shC={k:'',c:null};
+function sharp(src){if(!S.sh)return src;const k=src===base?ver+'|'+S.sh:null;if(k&&shC.k===k)return shC.c;
+ const a=S.sh/100*1.2,w=src.width,h=src.height,o=cp(src),x=o.getContext('2d'),id=x.getImageData(0,0,w,h),d=id.data,s=new Uint8ClampedArray(d),r=w*4;
+ for(let y=1;y<h-1;y++)for(let i=1;i<w-1;i++){const p=(y*w+i)*4;for(let c=0;c<3;c++){const q=p+c;d[q]=s[q]*(1+4*a)-a*(s[q-4]+s[q+4]+s[q-r]+s[q+r])}}
+ x.putImageData(id,0,0);if(k)shC={k,c:o};return o}
 function fx(x,x0,y0,w,h){
+ if(S.n){const k=Math.max(1,w/900);x.save();x.globalCompositeOperation='overlay';x.globalAlpha=S.n/100;x.translate(x0,y0);x.scale(k,k);x.fillStyle=x.createPattern(noise(),'repeat');x.fillRect(0,0,w/k,h/k);x.restore()}
  if(S.t){x.save();x.globalCompositeOperation='overlay';x.globalAlpha=Math.abs(S.t)/150;x.fillStyle=S.t>0?'#ff9a1f':'#2f8bff';x.fillRect(x0,y0,w,h);x.restore()}
  if(S.v){const g=x.createRadialGradient(x0+w/2,y0+h/2,Math.min(w,h)*.25,x0+w/2,y0+h/2,Math.hypot(w,h)/2);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,`rgba(0,0,0,${S.v/110})`);x.fillStyle=g;x.fillRect(x0,y0,w,h)}}
 function draw(c,scale,src=base){
@@ -208,11 +224,12 @@ function draw(c,scale,src=base){
  const x=c.getContext('2d');x.scale(c.width/cw,c.height/ch);
  x.save();x.beginPath();x.roundRect(0,0,cw,ch,orr);x.clip();
  if(!F.trans){let f=F.color;if(F.grad){const a=F.gang*Math.PI/180,r=Math.hypot(cw,ch)/2,g=x.createLinearGradient(cw/2-Math.cos(a)*r,ch/2-Math.sin(a)*r,cw/2+Math.cos(a)*r,ch/2+Math.sin(a)*r);g.addColorStop(0,F.color);g.addColorStop(1,F.color2);f=g}x.fillStyle=f;x.fillRect(0,0,cw,ch)}
+ if(F.bgb&&!F.trans&&(q+qb)>0){const s=Math.max(cw/w,ch/h)*1.15;x.save();x.filter=`blur(${w/60}px) brightness(.8)`;x.drawImage(src,(cw-w*s)/2,(ch-h*s)/2,w*s,h*s);x.restore()}
  if(F.sh>0){x.save();x.shadowColor='rgba(0,0,0,.5)';x.shadowBlur=w*F.sh/300;x.shadowOffsetY=w*F.sh/750;x.fillStyle=lw?F.bc:'#fff';x.beginPath();x.roundRect(p,p,w+2*lw,h+2*lw,rr+lw);x.fill();x.restore()}
  if(lw){x.fillStyle=F.bc;x.beginPath();x.roundRect(p,p,w+2*lw,h+2*lw,rr+lw);x.fill()}
  if(ow){x.strokeStyle=F.oc;x.lineWidth=ow;x.beginPath();x.roundRect(ow/2,ow/2,cw-ow,ch-ow,Math.max(0,orr-ow/2));x.stroke()}
  x.save();x.beginPath();x.roundRect(q,q,w,h,rr);x.clip();
- if(!orig)x.filter=fstr(src);x.drawImage(src,q,q);x.filter='none';
+ if(!orig)x.filter=fstr(src);x.drawImage(orig?src:sharp(src),q,q);x.filter='none';
  if(!orig){fx(x,q,q,w,h);wm(x,q,q,w,h)}x.restore();
  if(F.cap&&F.bot>0){const bh=qb-q,fs=Math.min(bh*.42,w*.06);x.fillStyle=F.capc;x.font=`600 ${fs}px Vazirmatn,Tahoma,sans-serif`;x.textAlign='center';x.textBaseline='middle';x.fillText(F.cap,cw/2,q+h+bh/2)}
  x.restore()}
@@ -225,9 +242,9 @@ $('#stage').addEventListener('wheel',e=>{if(e.ctrlKey){e.preventDefault();setZ(z
 addEventListener('resize',()=>fit());
 
 /* ---------- history ---------- */
-function commit(){hist=hist.slice(0,hi+1);hist.push(cp(base));if(hist.length>25)hist.shift();hi=hist.length-1;upd();thumbs();render()}
+function commit(){ver++;hist=hist.slice(0,hi+1);hist.push(cp(base));if(hist.length>25)hist.shift();hi=hist.length-1;upd();thumbs();palette();render()}
 function upd(){$('#undo').disabled=hi<1;$('#redo').disabled=hi>=hist.length-1;$('#rw').value=base.width;$('#rh').value=base.height}
-function go(d){const n=hi+d;if(n<0||n>=hist.length)return;hi=n;base=cp(hist[hi]);crop=null;upd();render()}
+function go(d){const n=hi+d;if(n<0||n>=hist.length)return;ver++;hi=n;base=cp(hist[hi]);crop=null;upd();render()}
 $('#undo').onclick=()=>go(-1);$('#redo').onclick=()=>go(1);
 
 function thumbs(){if(!base)return;const sm=mkc(96,Math.max(1,Math.round(base.height*96/base.width)));sm.getContext('2d').drawImage(base,0,0,sm.width,sm.height);const th=$('#th');th.innerHTML='';
@@ -242,7 +259,7 @@ addEventListener('paste',e=>{const it=[...e.clipboardData.items].find(i=>i.type.
 /* ---------- tools ---------- */
 function setTool(t){tool=t;if(t!=='crop')crop=null;drag=null;$$('[data-tool]').forEach(b=>b.classList.toggle('on',b.dataset.tool===t));$$('#ctx [data-t]').forEach(e=>e.hidden=!e.dataset.t.split(' ').includes(t));ov.style.cursor=t==='none'?'default':'crosshair';paintOv()}
 $$('[data-tool]').forEach(b=>b.onclick=()=>setTool(b.dataset.tool));
-const O=()=>({col:$('#col').value,sz:+$('#sz').value,fill:$('#fill').checked,txt:$('#txt').value,bg:$('#tbg').checked});
+const O=()=>({col:$('#col').value,sz:+$('#sz').value,fill:$('#fill').checked,txt:$('#txt').value,bg:$('#tbg').checked,tf:$('#tf').value});
 function pos(e){const r=ov.getBoundingClientRect(),p=P(base);return[(e.clientX-r.left)*ov.width/r.width-p,(e.clientY-r.top)*ov.height/r.height-p]}
 const clampP=p=>[Math.max(0,Math.min(base.width,p[0])),Math.max(0,Math.min(base.height,p[1]))];
 function paint(x,t,d,o){
@@ -254,7 +271,7 @@ function paint(x,t,d,o){
   if(t==='arrow'){const n=Math.atan2(b[1]-a[1],b[0]-a[0]),L=lw*5;x.beginPath();x.moveTo(b[0],b[1]);x.lineTo(b[0]-L*Math.cos(n-.45),b[1]-L*Math.sin(n-.45));x.lineTo(b[0]-L*Math.cos(n+.45),b[1]-L*Math.sin(n+.45));x.closePath();x.fill()}}
  else if(t==='rect'){const r=[Math.min(a[0],b[0]),Math.min(a[1],b[1]),Math.abs(b[0]-a[0]),Math.abs(b[1]-a[1])];o.fill?x.fillRect(...r):x.strokeRect(...r)}
  else if(t==='ell'){x.beginPath();x.ellipse((a[0]+b[0])/2,(a[1]+b[1])/2,Math.abs(b[0]-a[0])/2,Math.abs(b[1]-a[1])/2,0,0,7);o.fill?x.fill():x.stroke()}
- else if(t==='text'&&o.txt){const fs=w*o.sz/250;x.font=`700 ${fs}px Vazirmatn,Tahoma,sans-serif`;x.textAlign='center';x.textBaseline='middle';
+ else if(t==='text'&&o.txt){const fs=w*o.sz/250;x.font=`700 ${fs}px "${o.tf}",Vazirmatn,Tahoma,sans-serif`;x.textAlign='center';x.textBaseline='middle';
   if(o.bg){const tw=x.measureText(o.txt).width;x.fillStyle='rgba(15,23,42,.72)';x.beginPath();x.roundRect(a[0]-tw/2-fs*.5,a[1]-fs*.8,tw+fs,fs*1.6,fs*.35);x.fill();x.fillStyle=o.col}else{x.shadowColor='rgba(0,0,0,.7)';x.shadowBlur=fs/5}
   x.fillText(o.txt,a[0],a[1])}
  else if(t==='mark'){const r=w*o.sz/400;x.beginPath();x.arc(a[0],a[1],r,0,7);x.fill();x.fillStyle='#fff';x.strokeStyle='#fff';x.lineWidth=r/9;x.stroke();
@@ -263,7 +280,7 @@ function paint(x,t,d,o){
 function region(d){const a=clampP(d.a),b=clampP(d.b||d.a);return[Math.round(Math.min(a[0],b[0])),Math.round(Math.min(a[1],b[1])),Math.round(Math.abs(b[0]-a[0])),Math.round(Math.abs(b[1]-a[1]))]}
 function paintOv(){ox.clearRect(0,0,ov.width,ov.height);if(!base)return;const p=P(base);ox.save();ox.translate(p,p);
  if(tool==='crop'&&crop){ox.fillStyle='rgba(0,0,0,.55)';ox.beginPath();ox.rect(-p,-p,ov.width,ov.height);ox.rect(crop.x,crop.y,crop.w,crop.h);ox.fill('evenodd');ox.strokeStyle='#14b8a6';ox.lineWidth=2/zoom;ox.setLineDash([8/zoom,5/zoom]);ox.strokeRect(crop.x,crop.y,crop.w,crop.h);$('#cinfo').textContent=`${Math.round(crop.w)} × ${Math.round(crop.h)}`}
- else if(drag&&drag.b){if(tool==='mos'||tool==='blr'){const r=region(drag);ox.strokeStyle='#e3b86b';ox.lineWidth=2/zoom;ox.setLineDash([6/zoom,4/zoom]);ox.strokeRect(...r)}else paint(ox,tool,drag,O())}
+ else if(drag&&drag.b){if(tool==='spot'){const r=region(drag);ox.fillStyle='rgba(0,0,0,.6)';ox.beginPath();ox.rect(0,0,base.width,base.height);ox.rect(...r);ox.fill('evenodd')}else if(tool==='lens'){const r=Math.hypot(drag.b[0]-drag.a[0],drag.b[1]-drag.a[1]);ox.strokeStyle='#e3b86b';ox.lineWidth=2/zoom;ox.beginPath();ox.arc(drag.a[0],drag.a[1],r,0,7);ox.stroke()}else if(tool==='mos'||tool==='blr'){const r=region(drag);ox.strokeStyle='#e3b86b';ox.lineWidth=2/zoom;ox.setLineDash([6/zoom,4/zoom]);ox.strokeRect(...r)}else paint(ox,tool,drag,O())}
  ox.restore()}
 ov.addEventListener('pointerdown',e=>{if(!base||tool==='none')return;ov.setPointerCapture(e.pointerId);const a=pos(e);drag={a,b:null,pts:[a]};
  if(tool==='text'||tool==='mark'){paint(base.getContext('2d'),tool,drag,O());if(tool==='mark')mk++;drag=null;commit()}});
@@ -275,7 +292,9 @@ ov.addEventListener('pointermove',e=>{if(!drag)return;const b=pos(e);drag.b=b;
  paintOv()});
 ov.addEventListener('pointerup',()=>{if(!drag)return;const d=drag;drag=null;if(!d.b){paintOv();return}
  const bx=base.getContext('2d');
- if(tool==='mos'||tool==='blr'){const[rx,ry,rw,rh]=region(d);if(rw>2&&rh>2){
+ if(tool==='spot'){const[rx,ry,rw,rh]=region(d);if(rw>4&&rh>4){bx.save();bx.fillStyle='rgba(0,0,0,.62)';bx.beginPath();bx.rect(0,0,base.width,base.height);bx.rect(rx,ry,rw,rh);bx.fill('evenodd');bx.strokeStyle=O().col;bx.lineWidth=Math.max(2,base.width*O().sz/2500);bx.strokeRect(rx,ry,rw,rh);bx.restore();commit()}}
+ else if(tool==='lens'){const r=Math.hypot(d.b[0]-d.a[0],d.b[1]-d.a[1]),ax=d.a[0],ay=d.a[1];if(r>8){const t=cp(base),o=O();bx.save();bx.beginPath();bx.arc(ax,ay,r,0,7);bx.clip();bx.translate(ax,ay);bx.scale(2.2,2.2);bx.drawImage(t,-ax,-ay);bx.restore();bx.save();bx.strokeStyle=o.col;bx.lineWidth=Math.max(2,base.width*o.sz/700);bx.shadowColor='rgba(0,0,0,.5)';bx.shadowBlur=bx.lineWidth*2;bx.beginPath();bx.arc(ax,ay,r,0,7);bx.stroke();bx.restore();commit()}}
+ else if(tool==='mos'||tool==='blr'){const[rx,ry,rw,rh]=region(d);if(rw>2&&rh>2){
    if(tool==='mos'){const s=Math.max(4,Math.round(base.width*+$('#sz').value/400)),t=mkc(Math.max(1,Math.ceil(rw/s)),Math.max(1,Math.ceil(rh/s))),tx=t.getContext('2d');tx.drawImage(base,rx,ry,rw,rh,0,0,t.width,t.height);bx.save();bx.imageSmoothingEnabled=false;bx.drawImage(t,0,0,t.width,t.height,rx,ry,rw,rh);bx.restore()}
    else{const t=cp(base);bx.save();bx.beginPath();bx.rect(rx,ry,rw,rh);bx.clip();bx.filter=`blur(${base.width*+$('#sz').value/500}px)`;bx.drawImage(t,0,0);bx.restore()}
    commit()}}
@@ -298,6 +317,18 @@ $('#rh').oninput=()=>{if(base&&$('#lock').checked)$('#rw').value=Math.round($('#
 $('#rz').onclick=()=>{if(!base)return;const w=+$('#rw').value,h=+$('#rh').value;if(w<1||h<1||w>8000||h>8000){toast('اندازه معتبر نیست (۱ تا ۸۰۰۰ پیکسل)');return}
  const n=mkc(w,h),x=n.getContext('2d');x.imageSmoothingQuality='high';x.drawImage(base,0,0,w,h);base=n;commit();fit()};
 
+function fitTo(w,h,m){if(!base)return;const n=mkc(w,h),x=n.getContext('2d');x.imageSmoothingQuality='high';const cov=Math.max(w/base.width,h/base.height);
+ if(m==='contain'){x.save();x.filter=`blur(${Math.max(w,h)/45}px) brightness(.75)`;const s=cov*1.15;x.drawImage(base,(w-base.width*s)/2,(h-base.height*s)/2,base.width*s,base.height*s);x.restore();const c=Math.min(w/base.width,h/base.height);x.drawImage(base,(w-base.width*c)/2,(h-base.height*c)/2,base.width*c,base.height*c)}
+ else x.drawImage(base,(w-base.width*cov)/2,(h-base.height*cov)/2,base.width*cov,base.height*cov);base=n;commit();fit()}
+$('#pa').onclick=()=>{const[w,h]=$('#ps').value.split('x').map(Number);fitTo(w,h,$('#pm').value)};
+$('#angb').onclick=()=>{if(!base)return;const a=+$('#ang').value*Math.PI/180;if(!a)return;const w=base.width,h=base.height,nw=Math.round(Math.abs(w*Math.cos(a))+Math.abs(h*Math.sin(a))),nh=Math.round(Math.abs(w*Math.sin(a))+Math.abs(h*Math.cos(a))),n=mkc(nw,nh),x=n.getContext('2d');x.translate(nw/2,nh/2);x.rotate(a);x.drawImage(base,-w/2,-h/2);base=n;$('#ang').value=0;$('#ang').parentNode.querySelector('output').textContent=0;commit();fit();toast('گوشه‌های خالی را با ابزار برش حذف کنید')};
+function palette(){if(!base)return;const sm=mkc(40,Math.max(1,Math.round(base.height*40/base.width))),x=sm.getContext('2d');x.drawImage(base,0,0,sm.width,sm.height);const d=x.getImageData(0,0,sm.width,sm.height).data,m={};
+ for(let i=0;i<d.length;i+=4){if(d[i+3]<128)continue;const k=(d[i]>>5)+','+(d[i+1]>>5)+','+(d[i+2]>>5),o=m[k]||(m[k]={n:0,r:0,g:0,b:0});o.n++;o.r+=d[i];o.g+=d[i+1];o.b+=d[i+2]}
+ const cs=Object.values(m).sort((a,b)=>b.n-a.n).slice(0,6).map(o=>'#'+[o.r,o.g,o.b].map(v=>Math.round(v/o.n).toString(16).padStart(2,'0')).join(''));
+ ['#pal1','#pal2'].forEach(id=>{$(id).innerHTML=cs.map(c=>`<button class="sw" data-c="${c}" style="background:${c}" aria-label="${c}"></button>`).join('')})}
+$('#pal1').onclick=e=>{const c=e.target.dataset.c;if(c){F.color=c;F.grad=false;sync();render()}};
+$('#pal2').onclick=e=>{const c=e.target.dataset.c;if(c){F.bc=c;if(!F.bw)F.bw=8;sync();render()}};
+$('#est').onclick=()=>{if(!base)return;toBlob(base,b=>$('#xs').textContent=(b.size/1024).toFixed(0).toLocaleString('fa-IR')+' کیلوبایت')};
 /* ---------- export ---------- */
 function toBlob(src,cb){const mw=+$('#xmw').value,w=src.width+2*P(src),sc=mw>0&&mw<w?mw/w:1;let c=mkc(1,1);draw(c,sc,src);const f=$('#xf').value;
  if(f==='image/jpeg'){const j=mkc(c.width,c.height),jx=j.getContext('2d');jx.fillStyle='#fff';jx.fillRect(0,0,j.width,j.height);jx.drawImage(c,0,0);c=j}
@@ -312,6 +343,18 @@ $('#bt').onchange=e=>{const fs=[...e.target.files];fs.forEach((f,i)=>loadImg(f,c
 $$('[data-fp]').forEach(b=>b.onclick=()=>{Object.assign(F,F0,FP[b.dataset.fp][1]);sync();fit()});
 $('#frs').onclick=()=>{Object.assign(F,F0);sync();fit()};
 $('#cmp').onpointerdown=()=>{orig=true;render()};['pointerup','pointerleave'].forEach(ev=>$('#cmp')['on'+ev]=()=>{if(orig){orig=false;render()}});
+const TH=['dark','light','sepia'],TN={dark:'تیره',light:'روشن',sepia:'سپیا'};let ti=0;try{ti=Math.max(0,TH.indexOf(localStorage.getItem('khth')))}catch(e){}
+function setTh(){document.documentElement.dataset.theme=TH[ti];$('#thm').textContent='تم: '+TN[TH[ti]];try{localStorage.setItem('khth',TH[ti])}catch(e){}}
+$('#thm').onclick=()=>{ti=(ti+1)%3;setTh()};setTh();
+$('#p-tpl').innerHTML='<p style="color:var(--mu)">فیلتر، واترمارک و قاب فعلی را به‌صورت یک قالب ذخیره کنید تا روی همه تصویرهای سایت یکسان اعمال شود (پردازش دسته‌ای هم از آن استفاده می‌کند).</p><label class="f">نام قالب<input type="text" id="tn" placeholder="مثلاً درسنامه"></label><button class="btn pri" id="ts">ذخیره قالب فعلی</button><h3>قالب‌های ذخیره‌شده</h3><div id="tl"></div>';
+const TP=()=>{try{return JSON.parse(localStorage.getItem('khtpl')||'[]')}catch(e){return[]}};
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function tplList(){$('#tl').innerHTML=TP().map((t,i)=>`<div class="tp"><span>${esc(t.n)}</span><button class="btn" data-ta="${i}">اعمال</button><button class="btn" data-td="${i}">حذف</button></div>`).join('')||'<p style="color:var(--mu)">هنوز قالبی ذخیره نشده.</p>'}
+$('#ts').onclick=()=>{const n=$('#tn').value.trim()||('قالب '+(TP().length+1)),l=TP();l.push({n,S:{...S},W:{...W,img:null},F:{...F}});try{localStorage.setItem('khtpl',JSON.stringify(l))}catch(e){toast('ذخیره قالب ممکن نشد (حجم لوگو زیاد است)');return}$('#tn').value='';tplList();toast('قالب ذخیره شد')};
+$('#tl').onclick=e=>{const l=TP(),a=e.target.dataset.ta,d=e.target.dataset.td;
+ if(d!=null){l.splice(+d,1);localStorage.setItem('khtpl',JSON.stringify(l));tplList()}
+ else if(a!=null){const t=l[+a];Object.assign(S,S0,t.S);Object.assign(F,F0,t.F);Object.assign(W,t.W,{img:W.img});if(t.W.imgData){const i=new Image();i.onload=()=>{W.img=i;render()};i.src=t.W.imgData}sync();saveWM();fit();toast('قالب اعمال شد')}};
+tplList();
 sync();setTool('none');
 document.fonts&&document.fonts.load('700 20px Vazirmatn').then(()=>render());
 </script>
